@@ -2,6 +2,7 @@ package com.example.learn_android.controller
 
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import com.example.learn_android.MainActivity
@@ -20,35 +21,56 @@ class ttc_controller(_model: ttc_model, _context: AppCompatActivity) : View.OnCl
     }
     override fun onClick(v: View?)
     {
-        Toast.makeText(context, "View name: "+v?.getTag(), Toast.LENGTH_SHORT).show()
-        if(model.update_board(model.image_list.indexOf(v)))
+        if(v is ImageView)
         {
-            model.update_turn()
+            if(model.update_board(model.image_list.indexOf(v)))
+            {
+                model.update_turn()
+            }
+            update_view()
         }
-        update_view()
-        //v?.getTag()
+        else if(v is Button)
+        {
+            if(v.text == "Reset")
+            {
+                reset_board()
+                update_view(true)
+                Toast.makeText(context, "Reset Button Pressed", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
-    fun update_view()
+    fun update_view(reset: Boolean = false)
     {
         val iterator = model.image_list.iterator()
         for((index, _image) in iterator.withIndex())
         {
             if(model.board[index] == 0)
             {
-                //_image.setImageResource(R.drawable.x)
                 set_image(_image, R.drawable.x)
             }
             else if(model.board[index] == 1)
             {
                 set_image(_image, R.drawable.o)
-                //_image.setImageResource(R.drawable.o)
+            }
+            else if(reset)
+            {
+                set_image(_image, R.drawable.blank)
             }
         }
     }
+
+    fun reset_board()
+    {
+        for(i in model.board.indices)
+        {
+            model.turn = 0
+            model.board[i] = -1
+        }
+    }
+
     fun set_image(v: ImageView, source: Int)
     {
         v.setImageResource(android.R.color.transparent)
         v.setImageResource(source)
     }
-
 }
