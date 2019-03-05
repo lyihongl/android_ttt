@@ -6,6 +6,7 @@ import android.widget.ImageView
 class ttc_model (context: AppCompatActivity)
 {
     var turn = 0
+    var turn_num = 0
     val board = IntArray(9) {-1}
     val image_list: MutableList<ImageView> = mutableListOf()
 
